@@ -9,7 +9,8 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
-permissions: write-all
+permissions:
+  contents: read
 
 jobs:
   lint:
@@ -18,8 +19,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -29,26 +28,8 @@ jobs:
       - name: Rust Cache
         uses: swatinem/rust-cache@v2
 
-      - name: Auto-format code
-        run: cargo fmt
-
-      - name: Create Pull Request if code was formatted
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: \${{ secrets.GITHUB_TOKEN }}
-          commit-message: "style: fix Rust formatting via rustfmt"
-          title: "🤖 Auto-format Rust code"
-          body: |
-            This automated Pull Request corrects code formatting issues (spacing, line breaks, indentation) using `rustfmt`.
-            
-            ---
-            - 🛠️ **Developer:** [@wxwreak](https://github.com/wxwreak)  
-            - 📦 **Project:** [wrkfetch](https://github.com/${{ github.repository }})
-            
-            _Please review the changes before merging._
-          branch: "actions/auto-format"
-          base: main
-          delete-branch: true
+      - name: Check formatting
+        run: cargo fmt --check
 
       - name: Run Clippy (Linter)
         run: cargo clippy -- -D warnings
