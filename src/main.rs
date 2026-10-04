@@ -19,29 +19,27 @@ impl PackageManager {
         let dir = std::fs::read_dir(self.db_path).ok()?;
         let mut count = 0;
 
-        for entry in dir {
-            if let Ok(entry) = entry {
-                let name = entry.file_name().to_string_lossy().into_owned();
+        for entry in dir.flatten() {
+            let name = entry.file_name().to_string_lossy().into_owned();
 
-                if name.starts_with('.') || name == "ALPM_DB_VERSION" {
-                    continue;
-                }
-
-                if self.name == "flatpak" {
-                    if let Ok(mut app_dir) = std::fs::read_dir(entry.path()) {
-                        if app_dir.any(|e| {
-                            e.map(|b| b.file_name().to_string_lossy() == "current")
-                                .unwrap_or(false)
-                        }) {
-                            count += 1;
-                        }
-                    }
-                    continue;
-                }
-
-                count += 1;
+            if name.starts_with('.') || name == "ALPM_DB_VERSION" {
+                continue;
             }
+
+            if self.name == "flatpak" {
+                if let Ok(mut app_dir) = std::fs::read_dir(entry.path())
+                    && app_dir.any(|e| {
+                        e.map(|b| b.file_name().to_string_lossy() == "current")
+                        .unwrap_or(false)
+                    }) {
+                        count += 1;
+                    }
+                continue;
+            }
+
+            count += 1;
         }
+
 
         if count > 0 { Some(count) } else { None }
     }
@@ -76,7 +74,7 @@ fn main() {
         .first()
         .map(|cpu| cpu.brand().trim())
         .unwrap_or("Unknown");
-    let cpu_info_str = format!("{}", cpu_brand);
+    let cpu_info_str = cpu_brand.to_string();
 
     let gpu_info_str = pollster::block_on(async {
         let instance = wgpu::Instance::default();
