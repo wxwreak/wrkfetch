@@ -9,18 +9,17 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
+permissions: write-all
+
 jobs:
   lint:
     name: Format & Lint
     runs-on: ubuntu-latest
-    permissions:
-      contents: write       
-      pull-requests: write  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: \${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -38,13 +37,13 @@ jobs:
         with:
           token: \${{ secrets.GITHUB_TOKEN }}
           commit-message: "style: fix Rust formatting via rustfmt"
-          title: "Auto-format Rust code"
+          title: "🤖 Auto-format Rust code"
           body: |
             This automated Pull Request corrects code formatting issues (spacing, line breaks, indentation) using `rustfmt`.
             
             ---
-            - **Developer:** [@wxwreak](https://github.com/wxwreak)  
-            - **Project:** [wrkfetch](https://github.com/${{ github.event.repository.name }})
+            - 🛠️ **Developer:** [@wxwreak](https://github.com/wxwreak)  
+            - 📦 **Project:** [wrkfetch](https://github.com/${{ github.repository }})
             
             _Please review the changes before merging._
           branch: "actions/auto-format"
