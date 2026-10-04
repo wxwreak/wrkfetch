@@ -30,16 +30,16 @@ impl PackageManager {
                 if let Ok(mut app_dir) = std::fs::read_dir(entry.path())
                     && app_dir.any(|e| {
                         e.map(|b| b.file_name().to_string_lossy() == "current")
-                        .unwrap_or(false)
-                    }) {
-                        count += 1;
-                    }
+                            .unwrap_or(false)
+                    })
+                {
+                    count += 1;
+                }
                 continue;
             }
 
             count += 1;
         }
-
 
         if count > 0 { Some(count) } else { None }
     }
