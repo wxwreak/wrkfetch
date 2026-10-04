@@ -1,0 +1,10 @@
+[package]
+name = "wrkfetch"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+colored = "3.1.1"
+sysinfo = "0.39.6"
+wgpu = "24.0"
+pollster = "0.4"

@@ -1,0 +1,49 @@
+name: Rust CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  lint:
+    name: Format & Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write      
+      pull-requests: write  
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Rust Cache
+        uses: swatinem/rust-cache@v2
+
+      - name: Auto-format code
+        run: cargo fmt
+
+      - name: Create Pull Request if code was formatted
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: \${{ secrets.GITHUB_TOKEN }}
+          commit-message: "style: fix Rust formatting via rustfmt"
+          title: "Auto-format Rust code"
+          body: |
+            Tento automatický Pull Request opravuje formátování kódu (mezery, řádkování atd.) pomocí nástroje `rustfmt`.
+            
+            Před mergem prosím zkontroluj změny.
+          branch: "actions/auto-format"
+          base: main
+          delete-branch: true
+
+      - name: Run Clippy (Linter)
+        run: cargo clippy -- -D warnings
