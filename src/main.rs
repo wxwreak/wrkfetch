@@ -1,6 +1,6 @@
 // src/main.rs
 use colored::Colorize;
-use std::{thread, panic};
+use std::{panic, thread};
 use sysinfo::System;
 mod utils;
 
@@ -16,20 +16,23 @@ impl PackageManager {
             return None;
         }
 
-        let dir = std::fs::read_dir(self.db_path).ok()?;        
+        let dir = std::fs::read_dir(self.db_path).ok()?;
         let mut count = 0;
 
         for entry in dir {
             if let Ok(entry) = entry {
                 let name = entry.file_name().to_string_lossy().into_owned();
-                
+
                 if name.starts_with('.') || name == "ALPM_DB_VERSION" {
                     continue;
                 }
-                
+
                 if self.name == "flatpak" {
                     if let Ok(mut app_dir) = std::fs::read_dir(entry.path()) {
-                        if app_dir.any(|e| e.map(|b| b.file_name().to_string_lossy() == "current").unwrap_or(false)) {
+                        if app_dir.any(|e| {
+                            e.map(|b| b.file_name().to_string_lossy() == "current")
+                                .unwrap_or(false)
+                        }) {
                             count += 1;
                         }
                     }
@@ -39,7 +42,7 @@ impl PackageManager {
                 count += 1;
             }
         }
-        
+
         if count > 0 { Some(count) } else { None }
     }
 }
@@ -105,32 +108,56 @@ fn main() {
     let shell_str = utils::get_shell();
 
     let managers = vec![
-        PackageManager { name: "pacman", db_path: "/var/lib/pacman/local" },   
-        PackageManager { name: "dpkg", db_path: "/var/lib/dpkg/info" },          
-        PackageManager { name: "rpm", db_path: "/var/lib/rpm" },                 
-        PackageManager { name: "flatpak", db_path: "/var/lib/flatpak/app" },
-        PackageManager { name: "port", db_path: "/opt/local/var/macports/software" },
-        PackageManager { name: "pkg", db_path: "/var/db/pkg" },
-        PackageManager { name: "xbps", db_path: "/var/db/xbps" },
-        PackageManager { name: "nix", db_path: "/nix/var/nix/profiles/system/sw" },
+        PackageManager {
+            name: "pacman",
+            db_path: "/var/lib/pacman/local",
+        },
+        PackageManager {
+            name: "dpkg",
+            db_path: "/var/lib/dpkg/info",
+        },
+        PackageManager {
+            name: "rpm",
+            db_path: "/var/lib/rpm",
+        },
+        PackageManager {
+            name: "flatpak",
+            db_path: "/var/lib/flatpak/app",
+        },
+        PackageManager {
+            name: "port",
+            db_path: "/opt/local/var/macports/software",
+        },
+        PackageManager {
+            name: "pkg",
+            db_path: "/var/db/pkg",
+        },
+        PackageManager {
+            name: "xbps",
+            db_path: "/var/db/xbps",
+        },
+        PackageManager {
+            name: "nix",
+            db_path: "/nix/var/nix/profiles/system/sw",
+        },
     ];
 
     let mut found_managers = Vec::new();
     let mut total_pkgs = 0;
-    
+
     for pm in managers {
         if let Some(count) = pm.count_packages() {
             found_managers.push(format!("{} ({})", count, pm.name));
             total_pkgs += count;
         }
     }
-    
+
     let packages_str = if total_pkgs > 0 {
         found_managers.join(", ")
     } else {
         "0".to_string()
     };
-    
+
     let wm_de = utils::get_wm_de();
     let dots = format!(
         "{} {} {} {} {} {}",
@@ -159,10 +186,7 @@ fn main() {
 
     let cleaned_ascii = utils::SATURN.trim_matches('\n');
     let ascii_lines: Vec<&str> = cleaned_ascii.lines().collect();
-    let mut final_lines = vec![
-        "".to_string(),
-        "".to_string(),
-    ];
+    let mut final_lines = vec!["".to_string(), "".to_string()];
     final_lines.extend(lines);
 
     let max_logo_width = ascii_lines.iter().map(|s| s.len()).max().unwrap_or(0);

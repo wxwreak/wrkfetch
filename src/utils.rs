@@ -17,10 +17,12 @@ pub fn get_wm_de() -> String {
 }
 
 pub fn get_shell() -> String {
-    let raw_shell = env::var("SHELL")
-        .unwrap_or_else(|_| "unknown".to_string());
-    let mut shell_name = raw_shell.split("/").last()
-        .unwrap_or("unknown").to_lowercase();
+    let raw_shell = env::var("SHELL").unwrap_or_else(|_| "unknown".to_string());
+    let mut shell_name = raw_shell
+        .split("/")
+        .last()
+        .unwrap_or("unknown")
+        .to_lowercase();
     if shell_name == "unknown" {
         return "Unknown".to_string();
     }
@@ -29,7 +31,6 @@ pub fn get_shell() -> String {
     }
     shell_name
 }
-
 
 pub const SATURN: &str = r##"
                                              ___
