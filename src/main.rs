@@ -2,7 +2,15 @@
 use colored::Colorize;
 use std::{panic, thread};
 use sysinfo::System;
+use clap::Parser;
+use chrono::{Datelike, Local};
 mod utils;
+
+#[derive(Parser, Debug)]
+struct Args {
+    #[arg(short = 'a', long = "ascii")]
+    name: Option<String>,
+}
 
 struct PackageManager {
     name: &'static str,
@@ -47,6 +55,26 @@ impl PackageManager {
 
 fn main() {
     panic::set_hook(Box::new(|_| {}));
+    let args = Args::parse();
+    let target_name = match args.name {
+        Some(name) => name,
+        None => {
+            let today = Local::now();
+            if today.month() == 10 && today.day() == 31 {
+                "pumpkin".to_string()
+            } else {
+                "saturn".to_string()
+            }
+        }
+    };
+    let ascii_art = match utils::get_ascii_art(&target_name) {
+        Some(art) => art,
+        None => {
+            println!("Warning: art '{}' does not exist. Use saturn", target_name);
+            utils::SATURN
+        }
+    };
+
     let mut sys = System::new_all();
     sys.refresh_all();
     thread::sleep(sysinfo::MINIMUM_CPU_UPDATE_INTERVAL);
@@ -182,8 +210,23 @@ fn main() {
         dots,
     ];
 
-    let cleaned_ascii = utils::SATURN.trim_matches('\n');
-    let ascii_lines: Vec<&str> = cleaned_ascii.lines().collect();
+    let cleaned_ascii = ascii_art.trim_matches('\n');
+    let ascii_lines: Vec<String> = cleaned_ascii.lines().map(|line| {
+        match target_name.as_str() {
+            "pumpkin" => {
+                line.truecolor(255, 117, 24).to_string()
+            },
+            "saturn" => {
+                if line.contains("o888") || line.contains("Pd88") {
+                    line.truecolor(224, 194, 142).to_string()
+                } else {
+                    line.truecolor(140, 125, 107).to_string()
+                }
+            },
+            _ => line.to_string(),
+        }
+    }).collect();
+    
     let mut final_lines = vec!["".to_string(), "".to_string()];
     final_lines.extend(lines);
 
