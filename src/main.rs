@@ -1,9 +1,9 @@
 // src/main.rs
+use chrono::{Datelike, Local};
+use clap::Parser;
 use colored::Colorize;
 use std::{panic, thread};
 use sysinfo::System;
-use clap::Parser;
-use chrono::{Datelike, Local};
 mod utils;
 
 #[derive(Parser, Debug)]
@@ -211,22 +211,21 @@ fn main() {
     ];
 
     let cleaned_ascii = ascii_art.trim_matches('\n');
-    let ascii_lines: Vec<String> = cleaned_ascii.lines().map(|line| {
-        match target_name.as_str() {
-            "pumpkin" => {
-                line.truecolor(255, 117, 24).to_string()
-            },
+    let ascii_lines: Vec<String> = cleaned_ascii
+        .lines()
+        .map(|line| match target_name.as_str() {
+            "pumpkin" => line.truecolor(255, 117, 24).to_string(),
             "saturn" => {
                 if line.contains("o888") || line.contains("Pd88") {
                     line.truecolor(224, 194, 142).to_string()
                 } else {
                     line.truecolor(140, 125, 107).to_string()
                 }
-            },
+            }
             _ => line.to_string(),
-        }
-    }).collect();
-    
+        })
+        .collect();
+
     let mut final_lines = vec!["".to_string(), "".to_string()];
     final_lines.extend(lines);
 
