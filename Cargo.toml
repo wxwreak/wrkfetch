@@ -2,6 +2,11 @@
 name = "wrkfetch"
 version = "0.1.0"
 edition = "2024"
+authors = ["wxwreak"]
+description = "A lightweight, custom system information fetch tool written in Rust, featuring modular ASCII art with date-based Easter eggs and fast package counting."
+license = "MIT"
+repository = "https://github.com/wxwreak/wrkfetch"
+readme = "README.md"
 
 [dependencies]
 colored = "3.1.1"
