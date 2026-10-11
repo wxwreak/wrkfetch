@@ -104,8 +104,7 @@ fn main() {
         .unwrap_or("Unknown");
     let cpu_info_str = cpu_brand.to_string();
 
-    let gpu_info_str = utils::get_gpu()
-        .unwrap_or_else(|| "Unknown GPU".to_string());
+    let gpu_info_str = utils::get_gpu().unwrap_or_else(|| "Unknown GPU".to_string());
 
     let local_ip_str = std::net::UdpSocket::bind("0.0.0.0:0")
         .and_then(|socket| socket.connect("8.8.8.8:80").map(|_| socket))

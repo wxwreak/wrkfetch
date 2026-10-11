@@ -82,10 +82,7 @@ pub fn get_ascii_art(name: &str) -> Option<&'static str> {
 }
 
 pub fn get_gpu() -> Option<String> {
-    let output = Command::new("lspci")
-        .arg("-mm")
-        .output()
-        .ok()?;
+    let output = Command::new("lspci").arg("-mm").output().ok()?;
     let stdout = String::from_utf8_lossy(&output.stdout);
 
     for line in stdout.lines() {
