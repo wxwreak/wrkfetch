@@ -1,3 +1,5 @@
+![Crates.io Version](https://img.shields.io/crates/v/wrkfetch)
+
 # wrkfetch
 A lightweight, custom system information fetch tool written in Rust, featuring modular ASCII art with date-based Easter eggs and fast package counting.
 
