@@ -208,7 +208,7 @@ fn main() {
     let ascii_lines: Vec<String> = cleaned_ascii
         .lines()
         .map(|line| match target_name.as_str() {
-            "pumpkin" => line.truecolor(255, 117, 24).to_string(),
+            "pumpkin" | "jackolantern" | "halloween" => line.truecolor(255, 117, 24).to_string(),
             "saturn" => {
                 if line.contains("o888") || line.contains("Pd88") {
                     line.truecolor(224, 194, 142).to_string()
