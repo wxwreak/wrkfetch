@@ -7,6 +7,10 @@ description = "A lightweight, custom system information fetch tool written in Ru
 license = "MIT"
 repository = "https://github.com/wxwreak/wrkfetch"
 readme = "README.md"
+exlude = [
+    ".github/",
+    ".gitignore"
+]
 
 [dependencies]
 colored = "3.1.1"
