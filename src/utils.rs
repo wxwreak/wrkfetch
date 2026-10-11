@@ -1,5 +1,6 @@
 // src/utils.rs
 use std::env;
+use std::process::Command;
 
 pub fn get_wm_de() -> String {
     let raw_name = env::var("XDG_CURRENT_DESKTOP")
@@ -78,4 +79,25 @@ pub fn get_ascii_art(name: &str) -> Option<&'static str> {
 
         _ => None,
     }
+}
+
+pub fn get_gpu() -> Option<String> {
+    let output = Command::new("lspci")
+        .arg("-mm")
+        .output()
+        .ok()?;
+    let stdout = String::from_utf8_lossy(&output.stdout);
+
+    for line in stdout.lines() {
+        if line.contains("\"VGA compatible controller\"") || line.contains("\"3D controller\"") {
+            let parts: Vec<&str> = line.split('"').collect();
+
+            if parts.len() > 5 {
+                let vendor = parts[3].trim();
+                let device = parts[5].trim();
+                return Some(format!("{} {}", vendor, device));
+            }
+        }
+    }
+    None
 }
