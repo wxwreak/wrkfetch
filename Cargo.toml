@@ -11,6 +11,7 @@ exlude = [
     ".github/",
     ".gitignore"
 ]
+categories = ["command-line-utilies", "os", "neofetch", "fetch", "system-info", "cli", "ascii-art", "wrkfetch"]
 
 [dependencies]
 colored = "3.1.1"
