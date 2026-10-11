@@ -1,6 +1,6 @@
 [package]
 name = "wrkfetch"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 authors = ["wxwreak"]
 description = "A lightweight, custom system information fetch tool written in Rust, featuring modular ASCII art with date-based Easter eggs and fast package counting."
