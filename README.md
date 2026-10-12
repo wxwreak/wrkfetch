@@ -12,7 +12,7 @@ A lightweight, custom system information fetch tool written in Rust, featuring m
 ---
 
 ## Features
-- **Fast & Lightweight:** Written in Rust using efficient system interorgation libraries (`sysinfo`, `wgpu`).
+- **Fast & Lightweight:** Written in Rust using efficient system interorgation library `sysinfo`.
 
 - **Package Managers Support**
 | Package Managers |
@@ -44,7 +44,6 @@ A lightweight, custom system information fetch tool written in Rust, featuring m
 - **Crates Used:**
     - `colored`
     - `sysinfo`
-    - `wgpu`
     - `pollster`
     - `clap`
     - `chrono`
@@ -71,7 +70,7 @@ wrkfetch --ascii | -a | <ascii_name>
 ```
 
 ## Project Purpose
-This tool was created as a personal hands-on project to learn Rust, explore system internals, process file directories for package counting, and handle async GPU queries using `wgpu`.
+This tool was created as a personal hands-on project to learn Rust, explore system internals, process file directories for package counting, and handle async GPU queries using `lspci`.
 
 ## License
 This project is licensed undere the MIT License - see the [License](LICENSE).
