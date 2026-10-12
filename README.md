@@ -44,7 +44,6 @@ A lightweight, custom system information fetch tool written in Rust, featuring m
 - **Crates Used:**
     - `colored`
     - `sysinfo`
-    - `pollster`
     - `clap`
     - `chrono`
 
